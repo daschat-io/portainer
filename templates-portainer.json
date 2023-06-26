@@ -1,0 +1,51 @@
+{
+    "version": "2",
+    "templates": [
+        {
+            "type": 3,
+            "title": "Supabase by Daschat",
+            "name": "Supabase by Daschat",
+            "description": "Supabase makes it easy to use Postgres.",
+            "note": "Website: <a href=https://supabase.com' target='_blank' rel='noopener'>Supabase.com</a>",
+            "categories": [
+                "SelfHosted",
+                "Daschat"
+            ],
+            "platform": "linux",
+            "logo": "https://supabase.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsupabase-logo-wordmark--dark.53d797e9.png&w=256&q=75",
+            "repository": {
+                "stackfile": "composes-files/supabase.yml",
+                "url": "https://github.com/daschat-io/portainer"
+            },
+            "env": [
+                {
+                    "name": "SERVICE",
+                    "label": "Name of the service ",
+                    "description": "No spaces or points",
+                    "default": "supabase"
+                },
+                {
+                    "name": "DATA_LOCATION",
+                    "label": "Data localization ",
+                    "description": "Example: /apps/service",
+                    "default": "/_data/apps"
+                },
+                {
+                    "name": "URL",
+                    "label": "Service link",
+                    "description": "Example: supabase.service.com"
+                },
+                {
+                    "name": "NETWORK",
+                    "label": "Your Traefik network ",
+                    "description": "Example: proxy",
+                    "default": "proxy"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "label": "Password for database user"
+                }
+            ]
+        }
+   ]
+}
