@@ -52,6 +52,8 @@ services:
   supabase-rest:
     container_name: $SERVICE-rest
     image: postgrest/postgrest:v9.0.0
+    stdin_open: true
+    tty: true
     depends_on:
       - $SERVICE-db
     networks:
