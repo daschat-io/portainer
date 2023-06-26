@@ -21,6 +21,19 @@
 version: "2"
 
 services:
+  meta:
+    container_name: $SERVICE-meta
+    image: supabase/postgres-meta:v0.29.0
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: $SERVICE-db
+      PG_META_DB_PASSWORD: $DB_PASSWORD
+
   # Database
   supabase-db:
     container_name: $SERVICE-db
@@ -29,7 +42,7 @@ services:
     volumes:
       - $DATA_LOCATION/$SERVICE/db:/var/lib/postgresql/data
       - $DATA_LOCATION/$SERVICE/db:/docker-entrypoint-initdb.d
-    restart: always
+    restart: unless-stopped
     # healthcheck:
     #   test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
     #   timeout: 20s
