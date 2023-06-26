@@ -1,0 +1,105 @@
+# Maintainer: Abner G Jacobsen
+# Update: 2023-06-26
+
+#& type: 3
+#& title: Supabase
+#& description: Supabase makes it easy to use Postgres.
+#& note: Website: <a href='https://supabase.com/' target='_blank' rel='noopener'>Supabase</a>
+#& categories: SelfHosted, Daschat
+#& platform: linux
+#& logo: https://supabase.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsupabase-logo-wordmark--dark.53d797e9.png&w=128&q=75
+
+#% SERVICE: Name of the service (No spaces or points) [supabase]
+#% DATA_LOCATION: Data localization (Example: /apps/service) [/_data/apps]
+#% URL: Service link (Example: supabase.ca1.paas.aumo.live)
+#% NETWORK: Your Traefik network (Example: proxy) [proxy]
+#% DB_PASSWORD: Password for database user
+#% JWT_SECRET: JWT secret token
+
+
+# Work with Portainer
+version: "2"
+
+services:
+  supabase-realtime:
+    container_name: $SERVICE-realtime
+    image: supabase/realtime:v0.21.0
+    stdin_open: true
+    tty: true
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      DB_HOST: $SERVICE-db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: $DB_PASSWORD
+      DB_SSL: "false"
+      PORT: 4000
+      JWT_SECRET: $JWT_SECRET
+      REPLICATION_MODE: RLS
+      REPLICATION_POLL_INTERVAL: 100
+      SECURE_CHANNELS: "true"
+      SLOT_NAME: supabase_realtime_rls
+      TEMPORARY_SLOT: "true"
+    command: >
+      bash -c "./prod/rel/realtime/bin/realtime eval Realtime.Release.migrate
+      && ./prod/rel/realtime/bin/realtime start"
+
+  supabase-rest:
+    container_name: $SERVICE-rest
+    image: postgrest/postgrest:v9.0.0
+    stdin_open: true
+    tty: true
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://postgres:$DB_PASSWORD@$SERVICE-db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: $JWT_SECRET
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+
+  supabase-meta:
+    container_name: $SERVICE-meta
+    image: supabase/postgres-meta:v0.29.0
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: $SERVICE-db
+      PG_META_DB_PASSWORD: $DB_PASSWORD
+
+  # Database
+  supabase-db:
+    container_name: $SERVICE-db
+    image: supabase/postgres:14.1.0
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    volumes:
+      - $DATA_LOCATION/$SERVICE/db:/var/lib/postgresql/data
+      - $DATA_LOCATION/$SERVICE/db:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+    #   timeout: 20s
+    #   retries: 10
+    environment:
+      POSTGRES_PASSWORD: $DB_PASSWORD
+    networks:
+      - default
+    labels:
+      - "autoupdate=monitor" # https://github.com/PAPAMICA/container-updater
+
+networks:
+  default:
+    external:
+      name: $NETWORK
