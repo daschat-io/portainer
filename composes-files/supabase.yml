@@ -24,6 +24,8 @@ services:
   supabase-realtime:
     container_name: $SERVICE-realtime
     image: supabase/realtime:v0.21.0
+    stdin_open: true
+    tty: true
     depends_on:
       - $SERVICE-db
     networks:
