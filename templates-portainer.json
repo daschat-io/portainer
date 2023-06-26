@@ -44,6 +44,11 @@
                 {
                     "name": "DB_PASSWORD",
                     "label": "Password for database user"
+                },
+                {
+                    "name": "JWT_SECRET",
+                    "label": "JWT secret token",
+                    "description": "your-super-secret-jwt-token-with-at-least-32-characters-long. Example: u9438f8cjof48l4mds99rfyrpedkymcifd57ora9"
                 }
             ]
         }

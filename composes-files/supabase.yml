@@ -13,15 +13,56 @@
 #% DATA_LOCATION: Data localization (Example: /apps/service) [/_data/apps]
 #% URL: Service link (Example: supabase.ca1.paas.aumo.live)
 #% NETWORK: Your Traefik network (Example: proxy) [proxy]
-# DB_USER: Database user (No spaces or points) [wordpress]
 #% DB_PASSWORD: Password for database user
-# DB_ROOT: Password for database root
+#% JWT_SECRET: JWT secret token
+
 
 # Work with Portainer
 version: "2"
 
 services:
-  meta:
+  supabase-realtime:
+    container_name: $SERVICE-realtime
+    image: supabase/realtime:v0.21.0
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      DB_HOST: $SERVICE-db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: $DB_PASSWORD
+      DB_SSL: "false"
+      PORT: 4000
+      JWT_SECRET: $JWT_SECRET
+      REPLICATION_MODE: RLS
+      REPLICATION_POLL_INTERVAL: 100
+      SECURE_CHANNELS: "true"
+      SLOT_NAME: supabase_realtime_rls
+      TEMPORARY_SLOT: "true"
+    command: >
+      bash -c "./prod/rel/realtime/bin/realtime eval Realtime.Release.migrate
+      && ./prod/rel/realtime/bin/realtime start"
+
+  supabase-rest:
+    container_name: $SERVICE-rest
+    image: postgrest/postgrest:v9.0.0
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://postgres:$DB_PASSWORD@$SERVICE-db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: $JWT_SECRET
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+
+  supabase-meta:
     container_name: $SERVICE-meta
     image: supabase/postgres-meta:v0.29.0
     depends_on:
