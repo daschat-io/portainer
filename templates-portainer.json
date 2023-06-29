@@ -51,6 +51,83 @@
                     "description": "your-super-secret-jwt-token-with-at-least-32-characters-long. Example: u9438f8cjof48l4mds99rfyrpedkymcifd57ora9"
                 }
             ]
+        },
+        {
+            "type": 3,
+            "title": "Aumo-system-frontend by Aummo.ai",
+            "name": "Aumo Frontend by Aumo.ai",
+            "description": "AUMO - Autonomous Memory Operations - O conhecimento de sua organização disponível para seus colaboradores.",
+            "note": "Website: <a href=https://aumo.ai' target='_blank' rel='noopener'>aumo.ai</a>",
+            "categories": [
+                "SelfHosted",
+                "Daschat"
+            ],
+            "platform": "linux",
+            "logo": "https://supabase.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsupabase-logo-wordmark--dark.53d797e9.png&w=256&q=75",
+            "repository": {
+                "stackfile": "composes-files/aumo-system-frontend.yml",
+                "url": "https://github.com/daschat-io/portainer"
+            },
+            "env": [
+                {
+                    "name": "SERVICE",
+                    "label": "Name of the service ",
+                    "description": "No spaces or points",
+                    "default": "aumo-frontend"
+                },
+                {
+                    "name": "DATA_LOCATION",
+                    "label": "Data localization ",
+                    "description": "Example: /apps/service",
+                    "default": "/_data/apps"
+                },
+                {
+                    "name": "URL",
+                    "label": "Service link",
+                    "description": "Example: frontend.ca1.paas.aumo.live"
+                },
+                {
+                    "name": "NETWORK",
+                    "label": "Your Traefik network ",
+                    "description": "Example: proxy",
+                    "default": "proxy"
+                },
+                {
+                    "name": "NEXT_PUBLIC_ENV",
+                    "label": "NEXT env type",
+                    "default": "local"
+                },
+                {
+                    "name": "NEXT_PUBLIC_BACKEND_URL",
+                    "label": "Backend URL",
+                    "description": "Public URL of the API backend",
+                    "default": "http://18.228.129.125:5050"
+                },
+                {
+                    "name": "NEXT_PUBLIC_SUPABASE_URL",
+                    "label": "Supabase URL",
+                    "description": "Supabase project URL",
+                    "default": "https://vzixzywigzwejcdewxme.supabase.co"
+                },
+                {
+                    "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+                    "label": "Supabase ANON key",
+                    "description": "Supabase non securre key, is the anon key in the project",
+                    "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6aXh6eXdpZ3p3ZWpjZGV3eG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTk2ODcsImV4cCI6MjAwMzUzNTY4N30.kP56ScncGBs79VAdlJrBjqtljvyD1qfFECQO_TYsah8"
+                },
+                {
+                    "name": "NEXT_PUBLIC_GROWTHBOOK_URL",
+                    "label": "Growthbook URL",
+                    "description": "Growthbook public URL of the API backend",
+                    "default": "https://cdn.growthbook.io/api/features/sdk-AjVqDdrxa4ETFCoD"
+                },
+                {
+                    "name": "NEXT_PUBLIC_GROWTHBOOK_API_KEY",
+                    "label": "Growthbook API key",
+                    "description": "Growthbook API key",
+                    "default": "sdk-AjVqDdrxa4ETFCoD"
+                }
+            ]
         }
    ]
 }

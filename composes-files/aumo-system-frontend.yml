@@ -1,0 +1,50 @@
+# Maintainer: Abner G Jacobsen
+# Update: 2023-06-26
+
+#& type: 3
+#& title: Supabase
+#& description: Supabase makes it easy to use Postgres.
+#& note: Website: <a href='https://supabase.com/' target='_blank' rel='noopener'>Supabase</a>
+#& categories: SelfHosted, Daschat
+#& platform: linux
+#& logo: https://supabase.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsupabase-logo-wordmark--dark.53d797e9.png&w=128&q=75
+
+#% SERVICE: Name of the service (No spaces or points) [supabase]
+#% DATA_LOCATION: Data localization (Example: /apps/service) [/_data/apps]
+#% URL: Service link (Example: frontend.ca1.paas.aumo.live)
+#% NETWORK: Your Traefik network (Example: proxy) [proxy]
+#% NEXT_PUBLIC_ENV: local
+#% NEXT_PUBLIC_BACKEND_URL: http://18.228.129.125:5050
+#% NEXT_PUBLIC_SUPABASE_URL: https://vzixzywigzwejcdewxme.supabase.co
+#% NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6aXh6eXdpZ3p3ZWpjZGV3eG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTk2ODcsImV4cCI6MjAwMzUzNTY4N30.kP56ScncGBs79VAdlJrBjqtljvyD1qfFECQO_TYsah8
+#% NEXT_PUBLIC_GROWTHBOOK_URL: https://cdn.growthbook.io/api/features/sdk-AjVqDdrxa4ETFCoD
+#% NEXT_PUBLIC_GROWTHBOOK_API_KEY: sdk-AjVqDdrxa4ETFCoD
+
+
+# Work with Portainer
+version: "2"
+
+services:
+  frontend:
+    container_name: $SERVICE-frontend
+    image: bees-cljfprp370000awgl03ax9tu8-aumo-system-frontend
+    stdin_open: true
+    tty: true
+    depends_on:
+      - $SERVICE-db
+    networks:
+      - default
+    restart: always
+    labels:
+      - "autoupdate=monitor" # https://github.com/PAPAMICA/container-updater
+      - "traefik.enable=true"
+      - "traefik.http.routers.$SERVICE.entrypoints=https"
+      - "traefik.http.routers.$SERVICE.rule=Host(`$URL`)"
+      - "traefik.http.routers.$SERVICE.tls=true"
+      - "traefik.http.routers.$SERVICE.tls.certresolver=http"
+      - "traefik.http.services.$SERVICE.loadbalancer.server.port=3000"
+      - "traefik.docker.network=$NETWORK"
+networks:
+  default:
+    external:
+      name: $NETWORK
