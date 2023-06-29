@@ -58,7 +58,7 @@
             "name": "Aumo Frontend by Aumo.ai",
             "description": "AUMO - Autonomous Memory Operations - O conhecimento de sua organização disponível para seus colaboradores.",
             "note": "Website: <a href=https://aumo.ai' target='_blank' rel='noopener'>aumo.ai</a>",
-            "registry": "Aumo-system-teste",
+            // "registry": "Aumo-system-teste",
             "categories": [
                 "SelfHosted",
                 "Daschat"
