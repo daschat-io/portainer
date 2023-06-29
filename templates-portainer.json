@@ -84,7 +84,8 @@
                 {
                     "name": "URL",
                     "label": "Service link",
-                    "description": "Example: frontend.ca1.paas.aumo.live"
+                    "description": "Example: frontend.ca1.paas.aumo.live",
+                    "default": "frontend.ca1.paas.aumo.live"
                 },
                 {
                     "name": "NETWORK",

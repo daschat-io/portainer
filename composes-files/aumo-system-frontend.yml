@@ -30,8 +30,6 @@ services:
     image: bees-cljfprp370000awgl03ax9tu8-aumo-system-frontend
     stdin_open: true
     tty: true
-    depends_on:
-      - $SERVICE-db
     networks:
       - default
     restart: always
