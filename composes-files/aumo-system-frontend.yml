@@ -27,7 +27,7 @@ version: "2"
 services:
   frontend:
     container_name: $SERVICE-frontend
-    image: bees-cljfprp370000awgl03ax9tu8-aumo-system-frontend
+    image: 605575731210.dkr.ecr.sa-east-1.amazonaws.com/bees-cljfprp370000awgl03ax9tu8-aumo-system-frontend:latest
     stdin_open: true
     tty: true
     networks:
