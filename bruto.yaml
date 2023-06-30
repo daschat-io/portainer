@@ -1,0 +1,60 @@
+version: "2"
+
+services:
+  frontend:
+    container_name: frontend
+    image: 605575731210.dkr.ecr.sa-east-1.amazonaws.com/bees-cljfprp370000awgl03ax9tu8-aumo-system-frontend:0.0.2
+    stdin_open: true
+    tty: true
+    environment:
+      NEXT_PUBLIC_ENV: local
+      NEXT_PUBLIC_BACKEND_URL: https://b1.ca1.paas.aumo.live
+      NEXT_PUBLIC_SUPABASE_URL: https://vzixzywigzwejcdewxme.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6aXh6eXdpZ3p3ZWpjZGV3eG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTk2ODcsImV4cCI6MjAwMzUzNTY4N30.kP56ScncGBs79VAdlJrBjqtljvyD1qfFECQO_TYsah8
+      # NEXT_PUBLIC_GROWTHBOOK_URL: https://cdn.growthbook.io/api/features/sdk-AjVqDdrxa4ETFCoD
+      # NEXT_PUBLIC_GROWTHBOOK_API_KEY: sdk-AjVqDdrxa4ETFCoD
+    networks:
+      - default
+    restart: always
+    labels:
+      - "autoupdate=monitor" # https://github.com/PAPAMICA/container-updater
+      - "traefik.enable=true"
+      - "traefik.http.routers.f1.entrypoints=https"
+      - "traefik.http.routers.f1.rule=Host(`f1.ca1.paas.aumo.live`)"
+      - "traefik.http.routers.f1.tls=true"
+      - "traefik.http.routers.f1.tls.certresolver=http"
+      - "traefik.http.services.f1.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+  backend:
+    container_name: backend
+    image: 605575731210.dkr.ecr.sa-east-1.amazonaws.com/beesbackend-cljfprp370000awgl03ax9tu8-aumo-system-backend:0.0.1
+    stdin_open: true
+    tty: true
+    environment:
+      SUPABASE_URL: https://vzixzywigzwejcdewxme.supabase.co
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6aXh6eXdpZ3p3ZWpjZGV3eG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc5NTk2ODcsImV4cCI6MjAwMzUzNTY4N30.kP56ScncGBs79VAdlJrBjqtljvyD1qfFECQO_TYsah8
+      OPENAI_API_KEY: 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
+      ANTHROPIC_API_KEY: XXXXXX
+      JWT_SECRET_KEY: 11DP47dAw1wjLh+qWabytgWyOHP1B86De5oWBNWajM68gB6ythRFkeh7K7DX3C3Wgb5rRz8SSeniIXlSN+bQhA==
+      AUTHENTICATE: true
+      GOOGLE_APPLICATION_CREDENTIALS: /code/application_default_credentials.json
+      GOOGLE_CLOUD_PROJECT: XXXXX
+      MAX_BRAIN_SIZE: 52428800
+      MAX_REQUESTS_NUMBER: 200
+    networks:
+      - default
+    restart: always
+    labels:
+      - "autoupdate=monitor" # https://github.com/PAPAMICA/container-updater
+      - "traefik.enable=true"
+      - "traefik.http.routers.b1.entrypoints=https"
+      - "traefik.http.routers.b1.rule=Host(`b1.ca1.paas.aumo.live`)"
+      - "traefik.http.routers.b1.tls=true"
+      - "traefik.http.routers.b1.tls.certresolver=http"
+      - "traefik.http.services.b1.loadbalancer.server.port=5050"
+      - "traefik.docker.network=proxy"
+
+networks:
+  default:
+    external:
+      name: proxy
